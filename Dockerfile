@@ -1,27 +1,15 @@
-# Use an official Maven image to build the app
-FROM maven:3.8-openjdk-11 AS build
+# Use an OpenJDK image as the base image (Java 11 in this example)
+FROM openjdk:11-jdk-slim
 
-# Set the working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the pom.xml and the source code (ensure src is copied as well)
-COPY pom.xml .
-COPY src ./src
+# Copy the JAR file from the root of your repository to the container
+# If your .jar file is directly in the root directory of your repository, change the path accordingly
+COPY JobExpertSystem-0.0.1-SNAPSHOT.jar /app/JobExpertSystem.jar
 
-# Build the application using Maven
-RUN mvn clean install
-
-# Use an OpenJDK runtime image to run the app
-FROM openjdk:11-jre-slim
-
-# Set the working directory in the runtime container
-WORKDIR /app
-
-# Copy the built jar file from the Maven build stage
-COPY --from=build /app/target/JobExpertSystems.jar /app/JobExpertSystems.jar
-
-# Expose the port that your application will run on
+# Expose the port your application will run on (usually 8080 for Spring Boot)
 EXPOSE 8080
 
-# Run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "JobExpertSystems.jar"]
+# Run the JAR file
+CMD ["java", "-jar", "/app/JobExpertSystem.jar"]
