@@ -1,0 +1,34 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2820
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww12720\viewh7800\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # Use an official Maven image to build the app\
+FROM maven:3.8-openjdk-11 AS build\
+\
+# Set the working directory\
+WORKDIR /app\
+\
+# Copy the pom.xml and the source code\
+COPY pom.xml .\
+COPY src ./src\
+\
+# Build the application using Maven\
+RUN mvn clean install\
+\
+# Use an OpenJDK runtime image to run the app\
+FROM openjdk:11-jre-slim\
+\
+WORKDIR /app\
+\
+# Copy the built jar file from the Maven build stage\
+COPY --from=build /app/target/JobExpertSystems.jar /app/JobExpertSystems.jar\
+\
+# Expose the port that your application will run on\
+EXPOSE 8080\
+\
+# Run the Spring Boot application\
+ENTRYPOINT ["java", "-jar", "JobExpertSystems.jar"]\
+}
