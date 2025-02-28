@@ -4,7 +4,7 @@ FROM maven:3.8-openjdk-11 AS build
 # Set the working directory
 WORKDIR /app
 
-# Copy the pom.xml and the source code
+# Copy the pom.xml and the source code (ensure src is copied as well)
 COPY pom.xml .
 COPY src ./src
 
@@ -14,6 +14,7 @@ RUN mvn clean install
 # Use an OpenJDK runtime image to run the app
 FROM openjdk:11-jre-slim
 
+# Set the working directory in the runtime container
 WORKDIR /app
 
 # Copy the built jar file from the Maven build stage
