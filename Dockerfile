@@ -1,15 +1,14 @@
-# Use an OpenJDK image as the base image (Java 11 in this example)
-FROM openjdk:11-jdk-slim
+# Use an OpenJDK 17 base image
+FROM openjdk:17-jdk-slim
 
-# Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Copy the JAR file from the root of your repository to the container
-# If your .jar file is directly in the root directory of your repository, change the path accordingly
-COPY JobExpertSystem-0.0.1-SNAPSHOT.jar /app/JobExpertSystem.jar
+# Copy your JAR file into the container
+COPY JobExpertSystem-0.0.1-SNAPSHOT.jar /app
 
-# Expose the port your application will run on (usually 8080 for Spring Boot)
+# Expose the port the app will run on
 EXPOSE 8080
 
-# Run the JAR file
-CMD ["java", "-jar", "/app/JobExpertSystem.jar"]
+# Command to run the application
+CMD ["java", "-jar", "JobExpertSystem-0.0.1-SNAPSHOT.jar"]
